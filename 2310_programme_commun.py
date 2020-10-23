@@ -41,6 +41,7 @@ class Credits:
         self.prenom = prenom
         self.num_comptes = num_comptes
         self.credit_accorde = credit_accorde
+        
 # -------------------------------------------------------------------------
 
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,11 +120,10 @@ for ligne in operations_table:
     #ligneSplit = ligne.split(", ")
     elt = Operations(ligne[0], ligne[1], ligne[2], ligne[3])
     TAB_OPERATIONS.append(elt)
-    
+   
 print(TAB_CLIENTS[0].id_client)
 print(TAB_COMPTES[0].id_compte)
 print(TAB_OPERATIONS[0].id_operation)
-
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -143,7 +143,41 @@ print(TAB_OPERATIONS[0].id_operation)
 # for ligne in clients_table:
 #     print(ligne)
 
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Création nouvelle colonne Clients (attente Ndeye)
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Création nouvelle table Crédits (attente Ndeye)
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Calcul et enregistrement score pour chaque client (attente Julien)
+# # Enregistrement credit pour clients avec score > 0.4 (attente Olivier)
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Récupération  table Crédits 
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sql_req.execute("SELECT * FROM banque2.credits")
+credits_table = sql_req.fetchall()
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Calcul bénéfice banque
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+benefice = 0
+for ligne in credits_table:
+    benefice += 0.05 * ligne[4]
+print("benefice de la banque au bout de 12 mois : ",benefice)
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Pour gagner 10 fois plus
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gain_espere = 10*benefice
+duree_credit = (12 * gain_espere) / benefice
+print ("Pour gagner 10 fois plus, proposer des crédits sur ", duree_credit, " mois")
+    
 
 
 
