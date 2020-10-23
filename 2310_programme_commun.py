@@ -19,6 +19,7 @@ class Client:
         self.prenom = prenom
         self.adresse = adresse
         self.score = score
+        self.test = 0
 
 class Compte:
     def __init__(self, id_compte, id_client, solde):
