@@ -6,7 +6,7 @@ Created on Fri Oct 23 11:21:35 2020
 @author: formation
 """
 # -*- coding: utf-8 -*-
-# import mysql.connector as mc
+import mysql.connector as mc
 
 # -------------------------------------------------------------------------
 # Creation des différentes classes
@@ -19,7 +19,7 @@ class Client:
         self.prenom = prenom
         self.adresse = adresse
         self.score = score
-        self.test = 0
+
 
 class Compte:
     def __init__(self, id_compte, id_client, solde):
@@ -46,39 +46,40 @@ class Credits:
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # # Instancier une connexion
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# mydb  = mc.connect(
-#     host="localhost",
-#     user="jloyau",
-#     password="toto"
-# )
+mydb  = mc.connect(
+        host="localhost",
+        user="group1",
+        password="formation"
+ )
 
 # # --------------
 # # TEST ET CURSOR
 # # --------------
-# #print (mydb)
-# sql_req = mydb.cursor()
+print (mydb)
+sql_req = mydb.cursor()
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # # Recuperation des donnees de SQL
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# sql_req.execute("use banque")
+sql_req.execute("use banque2")
 
-# sql_req.execute("SELECT * FROM banque.clients")
-# clients_table = sql_req.fetchall()
+sql_req.execute("SELECT * FROM banque2.clients")
+clients_table = sql_req.fetchall()
 
-# sql_req.execute("SELECT * FROM banque.comptes")
-# comptes_table = sql_req.fetchall()
+sql_req.execute("SELECT * FROM banque2.comptes")
+comptes_table = sql_req.fetchall()
 
-# sql_req.execute("SELECT * FROM banque.operations")
-# operations_table = sql_req.fetchall()
+sql_req.execute("SELECT * FROM banque2.operations")
+operations_table = sql_req.fetchall()
 
-# mydb.commit()
+mydb.commit()
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ------------------------------------------------
 # INPUTS ALEATOIRES POUR TESTER EN AVANCE DE PHASE
 # ------------------------------------------------
+"""
 client1 = '"11", "0001", "toto", "titi", "1 rue de paris"'
 client2 = '"22", "0002", "totu", "titu", "2 rue de paris"'
 clients_table = [client1,client2]
@@ -92,7 +93,7 @@ op2 = '"OP2", "AAA2", "30", "3'
 operations_table = [op1,op2]
 # print(operations_table)
 # ------------------------------------------------
-
+"""
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Recuperation des donnees de la BD SQL "Banque" qui a été créée au préalable
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,22 +101,23 @@ operations_table = [op1,op2]
 # TAB_CLIENTS : liste contenant autant de elements Class qu'il y a de clients
 TAB_CLIENTS = []
 for ligne in clients_table:
-    ligneSplit = ligne.split(", ")
-    elt = Client(ligneSplit[0], ligneSplit[1], ligneSplit[2], ligneSplit[3], ligneSplit[4])
+    #print(ligne)
+   # ligneSplit = ligne.split(", ")
+    elt = Client(ligne[0], ligne[1], ligne[2], ligne[3], ligne[4])
     TAB_CLIENTS.append(elt)
 
 # TAB_COMPTES : liste contenant autant de elements Class qu'il y a de clients
 TAB_COMPTES = []
 for ligne in comptes_table:
-    ligneSplit = ligne.split(", ")
-    elt = Compte(ligneSplit[0], ligneSplit[1], ligneSplit[2])
+    #ligneSplit = ligne.split(", ")
+    elt = Compte(ligne[0], ligne[1], ligne[2])
     TAB_COMPTES.append(elt)
 
 # TAB_COMPTES : liste contenant autant de elements Class qu'il y a de clients
 TAB_OPERATIONS = []
 for ligne in operations_table:
-    ligneSplit = ligne.split(", ")
-    elt = Operations(ligneSplit[0], ligneSplit[1], ligneSplit[2], ligneSplit[3])
+    #ligneSplit = ligne.split(", ")
+    elt = Operations(ligne[0], ligne[1], ligne[2], ligne[3])
     TAB_OPERATIONS.append(elt)
     
 print(TAB_CLIENTS[0].id_client)
