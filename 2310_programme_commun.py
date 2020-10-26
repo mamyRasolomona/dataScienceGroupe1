@@ -245,14 +245,20 @@ print("benefice de la banque au bout de 12 mois : ",benefice)
 # # Pour gagner 10 fois plus, calculer la durée de crédit optimale pour chaque crédit
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+gain_espere = 10 * benefice
+valeur_future_credits = 0
+valeur_initiale_credits = 0
+
+#calcul de la valeur initiale des crédits
 for ligne in TAB_CREDITS:
-    benefice12mois = ligne.calculInterets12Mois()
-    gain_espere = 10 * benefice12mois
-    
-    n = 13
-    while (ligne.valeurFutureCredit(n) - ligne.credit_accorde) < gain_espere:
-        n += 1
-    
-    print("Pour le client ",str(ligne.id_client),"proposer la durée de :", str(n),"mois")
-    
-    
+        valeur_initiale_credits += ligne.credit_accorde
+
+#calcul de la valeur de n qui permet d'atteindre ou dépasser le gain espéré
+n=12
+while (valeur_future_credits - valeur_initiale_credits) < gain_espere: 
+    n += 1
+    valeur_future_credits = 0
+    for ligne in TAB_CREDITS:
+        valeur_future_credits += ligne.valeurFutureCredit(n)
+      
+print("Pour gagner 10 fois plus, proposer la durée de crédit de :", str(n),"mois")
