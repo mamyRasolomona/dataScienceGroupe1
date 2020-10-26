@@ -46,6 +46,13 @@ class Credits:
         self.prenom = prenom
         self.num_comptes = num_comptes
         self.credit_accorde = credit_accorde
+        
+    def calculInterets12Mois(self):
+        self.interets = self.credit_accorde * 0.05
+        return self.interets
+    
+    def valeurFutureCredit(self,n): #n = durée du crédit en mois formule valeur_future = valeur_initiale(1+taux_d_interet_annuel)**(nb_annuites)
+        return self.credit_accorde * (1.05 ** (n/12))
 # -------------------------------------------------------------------------
 
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,8 +136,8 @@ print(TAB_CLIENTS[0].id_client)
 print(TAB_COMPTES[0].id_compte)
 print(TAB_OPERATIONS[0].id_operation)
 
-# creation table credit
-#sql_req.execute("create table credits (id_credit int(20) not null auto_increment primary key, id_client int(20) not null, nom char(20) not null, prenom char(20) not null, numero_comptes int(30) not null, credit_accorde int(20))")
+#creation table credit
+sql_req.execute("create table credits (id_credit int(20) not null auto_increment primary key, id_client int(20) not null, nom char(20) not null, prenom char(20) not null, numero_comptes int(30) not null, credit_accorde int(20))")
 
 # Calcul du score dans Client
 for elt in TAB_CLIENTS:
@@ -151,7 +158,8 @@ for elt in TAB_CLIENTS:
 #for elt in TAB_CLIENTS:
 #   print (str(elt.score))
 
-#sql_req.execute('alter table banque2.clients add score float;')
+#création de la colonne score dans la table clients
+sql_req.execute('alter table banque2.clients add score float;')
 
 # Modification des valeurs score dans Clients
 for elt in TAB_CLIENTS:
@@ -208,3 +216,43 @@ mydb.commit()
 # #boucle pour afficher le contenu de la table capturee ci-dessus
 # for ligne in clients_table:
 #     print(ligne)
+
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Lecture table credits
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+sql_req.execute("SELECT * FROM banque2.credits")
+credits_table = sql_req.fetchall()
+
+
+# TAB_CREDITS : liste contenant autant de elements Class qu'il y a de credits
+TAB_CREDITS = []
+for ligne in credits_table:
+    elt = Credits(ligne[0], ligne[1], ligne[2], ligne[3], ligne[4],ligne[5])
+    TAB_CREDITS.append(elt)
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Calcul bénéfice banque 12 mois
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+benefice = 0
+for ligne in TAB_CREDITS:
+    benefice += ligne.calculInterets12Mois() 
+    
+print("benefice de la banque au bout de 12 mois : ",benefice)
+
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # Pour gagner 10 fois plus, calculer la durée de crédit optimale pour chaque crédit
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+for ligne in TAB_CREDITS:
+    benefice12mois = ligne.calculInterets12Mois()
+    gain_espere = 10 * benefice12mois
+    
+    n = 13
+    while (ligne.valeurFutureCredit(n) - ligne.credit_accorde) < gain_espere:
+        n += 1
+    
+    print("Pour le client ",str(ligne.id_client),"proposer la durée de :", str(n),"mois")
+    
+    
