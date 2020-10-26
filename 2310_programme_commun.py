@@ -39,9 +39,9 @@ class Operations:
         self.nb_operations = nb_operations
         self.nb_decouverts_dans_l_annee = nb_decouverts_dans_l_annee
 
-class Credits:
-    def __init__(self, id_credit, nom, prenom, num_comptes, credit_accorde):
+    def __init__(self, id_credit,id_client, nom, prenom, num_comptes, credit_accorde):
         self.id_credit = id_credit
+        self.id_client = id_client
         self.nom = nom
         self.prenom = prenom
         self.num_comptes = num_comptes
