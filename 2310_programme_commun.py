@@ -137,7 +137,7 @@ print(TAB_COMPTES[0].id_compte)
 print(TAB_OPERATIONS[0].id_operation)
 
 #creation table credit
-sql_req.execute("create table credits (id_credit int(20) not null auto_increment primary key, id_client int(20) not null, nom char(20) not null, prenom char(20) not null, numero_comptes int(30) not null, credit_accorde int(20))")
+sql_req.execute("create table credits (id_credit int(20) not null auto_increment primary key, id_client int(20) not null, nom char(20) not null, prenom char(20) not null, numero_comptes char(100) not null, credit_accorde int(20))")
 
 # Calcul du score dans Client
 for elt in TAB_CLIENTS:
