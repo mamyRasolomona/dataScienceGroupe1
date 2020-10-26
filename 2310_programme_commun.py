@@ -78,7 +78,7 @@ comptes_table = sql_req.fetchall()
 
 sql_req.execute("SELECT * FROM banque2.operations")
 operations_table = sql_req.fetchall()
-
+#oli
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ------------------------------------------------
