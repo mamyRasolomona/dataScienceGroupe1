@@ -10,8 +10,7 @@ import mysql.connector as mc
 
 # -------------------------------------------------------------------------
 # Creation des différentes classes
-# -------------------------------------------------------------------------       
-    
+# -------------------------------------------------------------------------
 class Client:
     def __init__(self, id_client, numCompte, nom, prenom, adresse, score=0):
         self.id_client = id_client
@@ -20,12 +19,12 @@ class Client:
         self.prenom = prenom
         self.adresse = adresse
         self.score = score
-        
+
     def calculScore(self, solde, nb_operations, nb_decouverts):
         if solde >=0:
             self.score = 0 + nb_operations/100.0 - nb_decouverts/12.0
         elif solde < 0:
-            self.score = -0.5 + nb_operations/100.0 - nb_decouverts/12.0         
+            self.score = -0.5 + nb_operations/100.0 - nb_decouverts/12.0
 
 class Compte:
     def __init__(self, id_compte, id_client, solde):
@@ -54,8 +53,8 @@ class Credits:
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mydb  = mc.connect(
         host="localhost",
-        user="jloyau",
-        password="toto"
+        user="group1",
+        password="formation"
  )
 
 # # --------------
@@ -78,7 +77,8 @@ comptes_table = sql_req.fetchall()
 
 sql_req.execute("SELECT * FROM banque2.operations")
 operations_table = sql_req.fetchall()
-#oli
+
+mydb.commit()
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ------------------------------------------------
@@ -129,7 +129,8 @@ print(TAB_CLIENTS[0].id_client)
 print(TAB_COMPTES[0].id_compte)
 print(TAB_OPERATIONS[0].id_operation)
 
-# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# creation table credit
+#sql_req.execute("create table credits (id_credit int(20) not null auto_increment primary key, id_client int(20) not null, nom char(20) not null, prenom char(20) not null, numero_comptes int(30) not null, credit_accorde int(20))")
 
 # Calcul du score dans Client
 for elt in TAB_CLIENTS:
@@ -147,16 +148,52 @@ for elt in TAB_CLIENTS:
     #print (SOLDE, NB_OPERATIONS, NB_DECOUVERTS)
     elt.calculScore(SOLDE, NB_OPERATIONS, NB_DECOUVERTS)
 
-for elt in TAB_CLIENTS:
-    print (str(elt.score))
+#for elt in TAB_CLIENTS:
+#   print (str(elt.score))
 
-sql_req.execute('alter table banque2.clients add score float;')
+#sql_req.execute('alter table banque2.clients add score float;')
 
 # Modification des valeurs score dans Clients
 for elt in TAB_CLIENTS:
     sql_req.execute('update banque2.clients set score="' + str(elt.score) + '" where identifiant=' + str(elt.id_client) + ';')
 
+# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#condition accord crédit : score > 0,4
+#Montant du crédit 10000*score : exemple si score = 0.5 => crédit = 5000 sur 12 mois avec un TJM de 5%
+#Requete SQL pour aller chercher la table credit
+#sql_req.execute("SELECT * FROM banque2.credits")
+#credits_table = sql_req.fetchall()
+
+#Requete SQL pour aller chercher la table clients avec la colonne score
+#sql_req.execute("SELECT * FROM banque2.clients")
+#clients_table = sql_req.fetchall()
+
+
+
+#nouvelle classe client2 avec l'ajout de la colonne score
+
+
+#creation de la table python à partir de la table SQL avec le score
+#TAB_CREDITS = []
+#for ligne in credits_table :
+#    elt = Credit(ligne[0], ligne[1], ligne[2], ligne[3], ligne[4], ligne[5])
+#    TAB_CREDITS.append(elt)
+
+# ajout des valeurs de credit dans la table python à partir des valeurs de scores.
+for ligne in  TAB_CLIENTS :
+    if ligne.score >0.4:
+        valeur_credit= ligne.score*10000
+        print(valeur_credit)
+        req = "insert into banque2.credits (id_client, nom, prenom, numero_comptes, credit_accorde) values(%s,%s,%s,%s,%s)"
+        sql_req.execute(req,(ligne.id_client,ligne.nom,ligne.prenom,ligne.numCompte,valeur_credit ))
+
+# requete pour modifier les data SQL  à partir de la table python, ne fonctionne pas.
+#req = "insert into banque2.credits (credit) values (%s)"
+#for i in TAB_CREDITS:
+#    sql_req.execute(req,i)
+
 mydb.commit()
+
 
 # Commandes pour info
 # ---------------------------------------------------------------------------
@@ -171,27 +208,3 @@ mydb.commit()
 # #boucle pour afficher le contenu de la table capturee ci-dessus
 # for ligne in clients_table:
 #     print(ligne)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-        
