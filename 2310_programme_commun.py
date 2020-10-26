@@ -10,7 +10,8 @@ import mysql.connector as mc
 
 # -------------------------------------------------------------------------
 # Creation des différentes classes
-# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------       
+    
 class Client:
     def __init__(self, id_client, numCompte, nom, prenom, adresse, score=0):
         self.id_client = id_client
@@ -19,7 +20,12 @@ class Client:
         self.prenom = prenom
         self.adresse = adresse
         self.score = score
-
+        
+    def calculScore(self, solde, nb_operations, nb_decouverts):
+        if solde >=0:
+            self.score = 0 + nb_operations/100.0 - nb_decouverts/12.0
+        elif solde < 0:
+            self.score = -0.5 + nb_operations/100.0 - nb_decouverts/12.0         
 
 class Compte:
     def __init__(self, id_compte, id_client, solde):
@@ -48,8 +54,8 @@ class Credits:
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mydb  = mc.connect(
         host="localhost",
-        user="group1",
-        password="formation"
+        user="jloyau",
+        password="toto"
  )
 
 # # --------------
@@ -126,7 +132,24 @@ print(TAB_OPERATIONS[0].id_operation)
 
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Calcul du score dans Client
+for elt in TAB_CLIENTS:
+    ID = elt.id_client
+    for elt2 in TAB_COMPTES:
+        if elt2.id_client == ID:
+            COMPTE = elt2.id_compte
+            SOLDE = elt2.solde
+            break
+    for elt2 in TAB_OPERATIONS:
+        if elt2.id_compte == COMPTE:
+            NB_OPERATIONS = elt2.nb_operations
+            NB_DECOUVERTS = elt2.nb_decouverts_dans_l_annee
+            break
+    #print (SOLDE, NB_OPERATIONS, NB_DECOUVERTS)
+    elt.calculScore(SOLDE, NB_OPERATIONS, NB_DECOUVERTS)
 
+for elt in TAB_CLIENTS:
+    print (str(elt.score))
 
 
 # Commandes pour info
