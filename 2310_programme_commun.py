@@ -79,7 +79,6 @@ comptes_table = sql_req.fetchall()
 sql_req.execute("SELECT * FROM banque2.operations")
 operations_table = sql_req.fetchall()
 
-mydb.commit()
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ------------------------------------------------
@@ -151,6 +150,13 @@ for elt in TAB_CLIENTS:
 for elt in TAB_CLIENTS:
     print (str(elt.score))
 
+sql_req.execute('alter table banque2.clients add score float;')
+
+# Modification des valeurs score dans Clients
+for elt in TAB_CLIENTS:
+    sql_req.execute('update banque2.clients set score="' + str(elt.score) + '" where identifiant=' + str(elt.id_client) + ';')
+
+mydb.commit()
 
 # Commandes pour info
 # ---------------------------------------------------------------------------
